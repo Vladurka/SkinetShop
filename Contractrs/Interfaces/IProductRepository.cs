@@ -7,6 +7,8 @@ namespace Contracts.Interfaces
     {
         public Task AddProduct(ProductAddRequest product);
         public Task<IEnumerable<Product>> GetProducts();
+        public Task<IEnumerable<string>> GetBrands();
+        public Task<IEnumerable<string>> GetTypes();
         public Task<Product> GetProductById(Guid id);
         public Task UpdateProduct(Product product);
         public Task DeleteProduct(Guid id);

@@ -26,6 +26,20 @@ namespace Infrastructure.Repositories
             await SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<string>> GetBrands()
+        {
+            return await _storeContext.Products.Select(x => x.Brand)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetTypes()
+        {
+            return await _storeContext.Products.Select(x => x.Type)
+                .Distinct()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Product>> GetProducts() =>
             await _storeContext.Products.ToListAsync();
 

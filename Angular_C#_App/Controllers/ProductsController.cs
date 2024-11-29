@@ -18,8 +18,8 @@ namespace Shop_App.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateProduct(ProductAddRequest productAdd)
+        [HttpPost("product")]
+        public async Task<ActionResult> AddProduct(ProductAddRequest productAdd)
         {
             try
             {
@@ -33,13 +33,12 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("product")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             try
             {
-                var products = await _productRepository.GetProducts();
-                return Ok(products);
+                return Ok(await _productRepository.GetProducts());
             }
 
             catch (Exception ex)
@@ -48,14 +47,40 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpGet("{id:Guid}")]
+        [HttpGet("brands")]
+        public async Task<ActionResult<IEnumerable<string>>> GetBrands()
+        {
+            try
+            {
+                return Ok(await _productRepository.GetBrands());
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetTypes()
+        {
+            try
+            {
+                return Ok(await _productRepository.GetTypes());
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet("product/{id:Guid}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
             try
             {
-                var product = await _productRepository.GetProductById(id);
-
-                return Ok(product);
+                return Ok(await _productRepository.GetProductById(id));
             }
 
             catch (Exception ex)
@@ -64,7 +89,7 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("product")]
         public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
             try
@@ -79,7 +104,7 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpDelete("{id:Guid}")]
+        [HttpDelete("product/{id:Guid}")]
         public async Task<ActionResult> DeleteProduct(Guid id)
         {
             try
