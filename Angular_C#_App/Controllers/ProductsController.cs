@@ -1,6 +1,8 @@
 ﻿using Contracts.DTO.Products;
+using Contracts.Interfaces;
 using Core.Enities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +12,25 @@ namespace Shop_App.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _storeContext;
-        public ProductsController(StoreContext storeContext) 
+        private readonly IProductRepository _productRepository;
+        public ProductsController(IProductRepository productRepository) 
         {
-            _storeContext = storeContext;
+            _productRepository = productRepository;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateProduct(ProductAddRequest productAdd)
+        {
+            try
+            {
+               await _productRepository.AddProduct(productAdd);
+               return Ok();
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -21,7 +38,8 @@ namespace Shop_App.Controllers
         {
             try
             {
-                return await _storeContext.Products.ToListAsync();
+                var products = await _productRepository.GetProducts();
+                return Ok(products);
             }
 
             catch (Exception ex)
@@ -35,12 +53,9 @@ namespace Shop_App.Controllers
         {
             try
             {
-                var product = await _storeContext.Products.FindAsync(id);
+                var product = await _productRepository.GetProductById(id);
 
-                if (product == null)
-                    return NotFound();
-
-                return product;
+                return Ok(product);
             }
 
             catch (Exception ex)
@@ -49,45 +64,34 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateProduct(ProductAddRequest productAdd)
-        {
-            var product = productAdd.ToProduct();
-            _storeContext.Products.Add(product);
-
-            await _storeContext.SaveChangesAsync();
-
-            return Ok();
-        }
-
         [HttpPut]
-        public async Task<ActionResult> UpdateProduct(Product product)
+        public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
-            if (!ProductExists(product.Id))
-                return BadRequest("Can not update this product");
+            try
+            {
+                await _productRepository.UpdateProduct(product);
+                return Ok(product);
+            }
 
-            _storeContext.Entry(product).State = EntityState.Modified;
-            await _storeContext.SaveChangesAsync(); 
-
-            return Ok(product);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult> DeleteProduct(Guid id)
         {
-            var product = await _storeContext.Products.FindAsync(id);
+            try
+            {
+                await _productRepository.DeleteProduct(id);
+                return NoContent();
+            }
 
-            if(product == null)
-                return NotFound();
-
-            _storeContext.Remove(product);
-
-            await _storeContext.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-
-        private bool ProductExists(Guid id) =>
-            _storeContext.Products.Any(x => x.Id == id);
     }
 }
