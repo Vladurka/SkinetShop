@@ -5,7 +5,7 @@ namespace Core.Enities
     public class BaseEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         protected virtual void ValidateString(string value)
         {

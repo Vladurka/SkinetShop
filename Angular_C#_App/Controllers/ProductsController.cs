@@ -1,29 +1,21 @@
-﻿using Contracts.DTO.Products;
-using Contracts.Interfaces;
+﻿using Core.Interfaces;
 using Core.Enities;
-using Infrastructure.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Core.Specifications;
+using Shop_App.RequestHelpers;
 
 namespace Shop_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
-    {
-        private readonly IProductRepository _productRepository;
-        public ProductsController(IProductRepository productRepository) 
-        {
-            _productRepository = productRepository;
-        }
-
-        [HttpPost("product")]
-        public async Task<ActionResult> AddProduct(ProductAddRequest productAdd)
+    public class ProductsController(IEntityRepository<Product> repo) : ControllerBase
+    { 
+        [HttpPost]
+        public async Task<ActionResult> AddProduct(Product product)
         {
             try
             {
-               await _productRepository.AddProduct(productAdd);
+               await repo.AddAsync(product);
                return Ok();
             }
 
@@ -33,12 +25,20 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpGet("product")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
+            ([FromQuery] ProductSpecParams specParams)
         {
             try
             {
-                return Ok(await _productRepository.GetProducts());
+                var spec = new ProductSpecification(specParams);
+
+                var products = await repo.ListAsync(spec);
+                var count = await repo.CountAsync(spec);
+
+                var pagination = new Pagination<Product>(specParams.PageIndex, specParams.PageSize, count, products);
+
+                return Ok(pagination);
             }
 
             catch (Exception ex)
@@ -48,11 +48,12 @@ namespace Shop_App.Controllers
         }
 
         [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<string>>> GetBrands()
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
             try
             {
-                return Ok(await _productRepository.GetBrands());
+                var spec = new BrandListSpecification();
+                return Ok(await repo.ListAsync(spec));
             }
 
             catch (Exception ex)
@@ -62,11 +63,12 @@ namespace Shop_App.Controllers
         }
 
         [HttpGet("types")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetTypes()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetTypes()
         {
             try
             {
-                return Ok(await _productRepository.GetTypes());
+                var spec = new TypeListSpecification();
+                return Ok(await repo.ListAsync(spec));
             }
 
             catch (Exception ex)
@@ -75,12 +77,12 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpGet("product/{id:Guid}")]
+        [HttpGet("{id:Guid}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
             try
             {
-                return Ok(await _productRepository.GetProductById(id));
+                return Ok(await repo.GetByIdAsync(id));
             }
 
             catch (Exception ex)
@@ -89,12 +91,12 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpPut("product")]
+        [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
             try
             {
-                await _productRepository.UpdateProduct(product);
+                await repo.UpdateAsync(product);
                 return Ok(product);
             }
 
@@ -104,12 +106,12 @@ namespace Shop_App.Controllers
             }
         }
 
-        [HttpDelete("product/{id:Guid}")]
+        [HttpDelete("{id:Guid}")]
         public async Task<ActionResult> DeleteProduct(Guid id)
         {
             try
             {
-                await _productRepository.DeleteProduct(id);
+                await repo.RemoveAsync(id);
                 return NoContent();
             }
 

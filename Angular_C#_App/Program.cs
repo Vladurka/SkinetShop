@@ -1,4 +1,4 @@
-using Contracts.Interfaces;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +12,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 ﻿using Core.Enities;
 
-namespace Contracts.Interfaces
+namespace Core.Interfaces
 {
     public interface IProductRepository
     {

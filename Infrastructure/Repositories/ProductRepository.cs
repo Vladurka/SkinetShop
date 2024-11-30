@@ -1,84 +1,94 @@
-﻿using Contracts.DTO.Products;
-using Contracts.Interfaces;
+﻿using Core.Interfaces;
 using Core.Enities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Infrastructure.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository(StoreContext context) : IProductRepository
     {
-        private readonly StoreContext _storeContext;
-        public ProductRepository(StoreContext storeContext) 
-        {
-            _storeContext = storeContext;
-        }
 
-        public async Task AddProduct(ProductAddRequest productAdd)
+        public async Task AddProductAsync(Product product)
         {
-            if (await ProductExistsName(productAdd.Name))
+            if (await ProductExistsName(product.Name))
                 throw new InvalidOperationException("Product with this name already exists");
 
-            var product = productAdd.ToProduct();
-            _storeContext.Products.Add(product);
+            context.Products.Add(product);
 
             await SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<string>> GetBrands()
+        public async Task<IReadOnlyList<string>> GetBrandsAsync()
         {
-            return await _storeContext.Products.Select(x => x.Brand)
+            return await context.Products.Select(x => x.Brand)
                 .Distinct()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetTypes()
+        public async Task<IReadOnlyList<string>> GetTypesAsync()
         {
-            return await _storeContext.Products.Select(x => x.Type)
+            return await context.Products.Select(x => x.Type)
                 .Distinct()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProducts() =>
-            await _storeContext.Products.ToListAsync();
-
-        public async Task<Product> GetProductById(Guid id)
+        public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand,
+            string? type, string? sort)
         {
-            var product = await _storeContext.Products.FindAsync(id);
+            var query = context.Products.AsQueryable();
 
-            if (!await ProductExistsId(id) || product == null)
+            if(!string.IsNullOrWhiteSpace(brand))
+                query = query.Where(x => x.Brand == brand);
+
+            if(!string.IsNullOrWhiteSpace(type))
+                query = query.Where(x => x.Type == type);
+
+            query = sort switch
+            {
+                "priceAsc" => query.OrderBy(x => x.Price),
+                "priceDesc" => query.OrderByDescending(x => x.Price),
+                _ => query.OrderBy(x => x.Name),
+            };
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<Product> GetProductByIdAsync(Guid id)
+        {
+            var product = await context.Products.FindAsync(id);
+
+            if (!await ProductExistsIdAsync(id) || product == null)
                 throw new InvalidOperationException("Product was not found");
 
             return product;
         }
 
-        public async Task UpdateProduct(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
-            if (!await ProductExistsId(product.Id))
+            if (!await ProductExistsIdAsync(product.Id))
                 throw new InvalidOperationException("Can not update this product");
 
-            _storeContext.Entry(product).State = EntityState.Modified;
+            context.Entry(product).State = EntityState.Modified;
             await SaveChangesAsync();
         }
-        public async Task DeleteProduct(Guid id)
+        public async Task DeleteProductAsync(Guid id)
         {
-            var product = await GetProductById(id);
+            var product = await GetProductByIdAsync(id);
 
-            _storeContext.Remove(product);
+            context.Remove(product);
             await SaveChangesAsync();
         }
 
         public async Task SaveChangesAsync()
         {
-            if (await _storeContext.SaveChangesAsync() <= 0)
+            if (await context.SaveChangesAsync() <= 0)
                 throw new InvalidOperationException("Could not save changes");
         }
             
-        public async Task<bool> ProductExistsId(Guid id) =>
-             await _storeContext.Products.AnyAsync(x => x.Id == id);
+        public async Task<bool> ProductExistsIdAsync(Guid id) =>
+             await context.Products.AnyAsync(x => x.Id == id);
 
         public async Task<bool> ProductExistsName(string name) =>
-            await _storeContext.Products.AnyAsync(x => x.Name == name);
+            await context.Products.AnyAsync(x => x.Name == name);
     }
 }
