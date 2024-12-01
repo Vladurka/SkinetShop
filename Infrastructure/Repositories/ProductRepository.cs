@@ -7,7 +7,6 @@ namespace Infrastructure.Repositories
 {
     public class ProductRepository(StoreContext context) : IProductRepository
     {
-
         public async Task AddProductAsync(Product product)
         {
             if (await ProductExistsName(product.Name))

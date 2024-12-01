@@ -2,13 +2,10 @@
 using Core.Enities;
 using Microsoft.AspNetCore.Mvc;
 using Core.Specifications;
-using Shop_App.RequestHelpers;
 
 namespace Shop_App.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController(IEntityRepository<Product> repo) : ControllerBase
+    public class ProductsController(IEntityRepository<Product> repo) : BaseApiController
     { 
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)
@@ -33,12 +30,8 @@ namespace Shop_App.Controllers
             {
                 var spec = new ProductSpecification(specParams);
 
-                var products = await repo.ListAsync(spec);
-                var count = await repo.CountAsync(spec);
-
-                var pagination = new Pagination<Product>(specParams.PageIndex, specParams.PageSize, count, products);
-
-                return Ok(pagination);
+                return await CreatePagedResult(repo, spec, specParams.PageIndex,
+                    specParams.PageSize);
             }
 
             catch (Exception ex)
