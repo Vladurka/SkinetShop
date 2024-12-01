@@ -13,8 +13,6 @@ namespace Core.Interfaces
         public Task AddAsync(T entity);
         public Task UpdateAsync(T entity);
         public Task RemoveAsync(Guid id);
-        public Task SaveChangesAsync();
-        public Task<bool> ExistsIdAsync(Guid id);
         public Task<int> CountAsync(ISpecification<T> spec);
     }
 }

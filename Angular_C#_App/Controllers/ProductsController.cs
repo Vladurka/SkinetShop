@@ -10,16 +10,8 @@ namespace Shop_App.Controllers
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)
         {
-            try
-            {
-               await repo.AddAsync(product);
-               return Ok();
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            await repo.AddAsync(product);
+            return Ok();
         }
 
         [HttpGet]
@@ -43,45 +35,21 @@ namespace Shop_App.Controllers
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
-            try
-            {
-                var spec = new BrandListSpecification();
-                return Ok(await repo.ListAsync(spec));
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var spec = new BrandListSpecification();
+            return Ok(await repo.ListAsync(spec));
         }
 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetTypes()
         {
-            try
-            {
-                var spec = new TypeListSpecification();
-                return Ok(await repo.ListAsync(spec));
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var spec = new TypeListSpecification();
+            return Ok(await repo.ListAsync(spec));
         }
 
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
-            try
-            {
-                return Ok(await repo.GetByIdAsync(id));
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return Ok(await repo.GetByIdAsync(id));
         }
 
         [HttpPut]
