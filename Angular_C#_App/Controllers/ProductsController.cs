@@ -6,7 +6,7 @@ using Core.Specifications;
 namespace Shop_App.Controllers
 {
     public class ProductsController(IEntityRepository<Product> repo) : BaseApiController
-    { 
+    {
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)
         {
