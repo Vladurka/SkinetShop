@@ -2,21 +2,21 @@
 {
     public class ProductSpecParams
     {
-        private const int MAX_PAGE_SIZE = 50;
+        private const int MAX_PAGE_SIZE = 24;
         public int PageIndex { get; set; } = 1;
 
-        private int _pageSize = 6;
+        private int _pageSize = 24;
 
         public int PageSize
         {
-            get => _pageSize; 
+            get => _pageSize;
             set => _pageSize = (value > MAX_PAGE_SIZE) ? MAX_PAGE_SIZE : value;
         }
 
         private List<string> _brands = [];
         public List<string> Brands
         {
-            get => _brands; 
+            get => _brands;
             set => _brands = value.SelectMany(x => x.Split(",",
                 StringSplitOptions.RemoveEmptyEntries)).ToList();
         }
@@ -29,7 +29,7 @@
                 StringSplitOptions.RemoveEmptyEntries)).ToList();
         }
 
-        public string? Sort {  get; set; }
+        public string? Sort { get; set; }
 
         private string? _search;
 
