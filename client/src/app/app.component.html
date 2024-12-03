@@ -1,14 +1,5 @@
 <app-header></app-header>
 
 <div class="items-center">
-  <h2 class="text-3xl font-bold text-center mt-5">Welcome to {{title}}</h2>
-  <ul class="grid grid-cols-4 justify-items-center">
-    @for(product of products; track product.id){
-      <div class="w-[200px] text-center mt-5 border p-2">
-          {{product.name}} <br/>
-          {{product.price}} $ <br/>
-          Quantity left: {{product.quantityInStock}}
-      </div>
-    }
-</ul>
+  <app-shop></app-shop>
 </div>

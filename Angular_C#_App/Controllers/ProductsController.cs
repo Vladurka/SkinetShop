@@ -14,6 +14,15 @@ namespace Shop_App.Controllers
             return Ok();
         }
 
+        [HttpPost("AddProducts")]
+        public async Task<ActionResult> AddProducts(Product[] products)
+        {
+            foreach (var product in products)
+                await repo.AddAsync(product);
+
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
             ([FromQuery] ProductSpecParams specParams)
