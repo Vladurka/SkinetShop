@@ -2,10 +2,10 @@
 {
     public class ProductSpecParams
     {
-        private const int MAX_PAGE_SIZE = 24;
+        private const int MAX_PAGE_SIZE = 20;
         public int PageIndex { get; set; } = 1;
 
-        private int _pageSize = 24;
+        private int _pageSize = 5;
 
         public int PageSize
         {

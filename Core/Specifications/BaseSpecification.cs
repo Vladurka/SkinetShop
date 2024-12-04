@@ -43,7 +43,6 @@ namespace Core.Specifications
             Take = take;
             Skip = skip;
         }
-
     }
 
     public class BaseSpecification<T, TResult>(Expression<Func<T, bool>> criteria)
