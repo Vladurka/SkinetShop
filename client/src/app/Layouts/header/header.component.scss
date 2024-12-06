@@ -11,3 +11,9 @@
   height: 32px;
   line-height: 24px;
 }
+
+a{
+  &.active{
+    color: #7f00ff
+  }
+}
