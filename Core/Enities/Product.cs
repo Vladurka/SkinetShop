@@ -29,12 +29,6 @@ namespace Core.Enities
             decimal price, string pictureUrl, 
             string type, string brand, int quantityInStock)
         {
-            base.ValidateString(name);
-            base.ValidateString(descriptor);
-            base.ValidateString(pictureUrl);
-            base.ValidateString(type);
-            base.ValidateString(brand);
-
             Id = Guid.NewGuid();
             Name = name;
             Descriptor = descriptor;

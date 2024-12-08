@@ -1,7 +1,7 @@
+using Core.Enities.Service.Interfaces;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Shop_App.Middleware;
 using StackExchange.Redis;
@@ -16,7 +16,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var redisConfig = builder.Configuration.GetSection("Redis");
+    var redisConfig = builder.Configuration.GetSection("RedisConnection");
     return ConnectionMultiplexer.Connect(new ConfigurationOptions
     {
         EndPoints = { { redisConfig["Host"], int.Parse(redisConfig["Port"]) } },
@@ -24,8 +24,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
         Password = redisConfig["Password"]
     });
 });
+builder.Services.AddSingleton<ICartRepository, CartRepository>();
 
-builder.Services.AddScoped<RedisService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 builder.Services.AddCors();
