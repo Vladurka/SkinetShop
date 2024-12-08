@@ -1,17 +1,31 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Shop_App.Middleware;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection"));
 });
 
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var redisConfig = builder.Configuration.GetSection("Redis");
+    return ConnectionMultiplexer.Connect(new ConfigurationOptions
+    {
+        EndPoints = { { redisConfig["Host"], int.Parse(redisConfig["Port"]) } },
+        User = redisConfig["User"],
+        Password = redisConfig["Password"]
+    });
+});
+
+builder.Services.AddScoped<RedisService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 builder.Services.AddCors();
