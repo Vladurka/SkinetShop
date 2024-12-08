@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ShopService } from '../../../Core/Services/shop.service';
+import { ShopService } from '../../../Core/services/shop.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { MatButton } from '@angular/material/button';

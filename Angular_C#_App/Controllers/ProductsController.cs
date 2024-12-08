@@ -2,14 +2,19 @@
 using Core.Enities;
 using Microsoft.AspNetCore.Mvc;
 using Core.Specifications;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shop_App.Controllers
 {
-    public class ProductsController(IEntityRepository<Product> repo) : BaseApiController
+    public class ProductsController(IEntityRepository<Product> repo, StoreContext context) : BaseApiController
     {
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)
         {
+            if(await ExistsNameAsync(product.Name))
+                return BadRequest();
+
             await repo.AddAsync(product);
             return Ok();
         }
@@ -58,7 +63,8 @@ namespace Shop_App.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
-            return Ok(await repo.GetByIdAsync(id));
+            var product = await repo.GetByIdAsync(id);
+            return Ok(product);
         }
 
         [HttpPut]
@@ -90,5 +96,8 @@ namespace Shop_App.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        private async Task<bool> ExistsNameAsync(string name) =>
+            await context.Products.AnyAsync(x => x.Name == name);
     }
 }

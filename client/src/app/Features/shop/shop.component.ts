@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ShopService } from '../../Core/Services/shop.service';
+import { ShopService } from '../../Core/services/shop.service';
 import { Product } from '../../Shared/models/Product';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { ProductItemComponent } from "./product-item/product-item.component";

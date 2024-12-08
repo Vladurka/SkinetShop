@@ -6,34 +6,23 @@ namespace Shop_App.Controllers
     public class BuggyController : BaseApiController
     {
         [HttpGet("unauthorized")]
-        public ActionResult GetUnauthorized()
-        {
-            return Unauthorized("Unauthorized");
-        }
+        public ActionResult GetUnauthorized() =>
+            Unauthorized("Unauthorized");
 
         [HttpGet("badrequest")]
-        public ActionResult GetBadRequest()
-        {
-            return BadRequest("Bad request");
-        }
+        public ActionResult GetBadRequest() =>
+            BadRequest("Bad request");
 
         [HttpGet("notfound")]
-        public ActionResult GetNotFound()
-        {
-            return NotFound("Not found");
-        }
+        public ActionResult GetNotFound() =>
+            NotFound("Not found");
 
         [HttpGet("internalerror")]
-        public ActionResult GetInternalError()
-        {
+        public ActionResult GetInternalError() =>
             throw new Exception();
-        }
 
-        [HttpGet("validationerror")]
-        public ActionResult GetValidationError(Product product)
-        {
-            return Ok();
-        }
-
+        [HttpPost("validationerror")]
+        public ActionResult GetValidationError(Product product) =>
+            BadRequest();
     }
 }

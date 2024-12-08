@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
         {
             var entity = await context.Set<T>().FindAsync(id);
 
-            if (entity == null || !await ExistsIdAsync(id))
+            if (entity == null)
                 throw new InvalidOperationException("Entity was not found");
 
             return entity;
@@ -69,7 +69,7 @@ namespace Infrastructure.Repositories
             SpecificationEvaluator<T>.GetQuery<T, TResult>(context.Set<T>().AsQueryable(), spec);
 
         private async Task<bool> ExistsIdAsync(Guid id) =>
-           await context.Set<T>().AnyAsync(x => x.Id == x.Id);
+           await context.Set<T>().AnyAsync(x => x.Id == id);
 
         private async Task SaveChangesAsync()
         {
