@@ -11,7 +11,12 @@ namespace Shop_App.Controllers
         {
             var cart = await repo.GetCartAsync(id.ToString());
 
-            return Ok(cart ?? new ShoppingCart { Id = id });
+            if (cart == null)
+            {
+                cart = new ShoppingCart { Id = id };
+                await repo.SetCartAsync(cart);
+            }
+            return Ok(cart);
         }
 
         [HttpPost]
@@ -19,7 +24,8 @@ namespace Shop_App.Controllers
         {
             var updatedCart = await repo.SetCartAsync(cart);
 
-            if (updatedCart == null) return BadRequest("Problem with the cart");
+            if (updatedCart == null)
+                return BadRequest("Problem with the cart");
 
             return Ok(updatedCart);
         }
@@ -28,10 +34,7 @@ namespace Shop_App.Controllers
         public async Task<ActionResult> DeleteCart(Guid id)
         {
             var result = await repo.DeleteCartAsync(id.ToString());
-
-            if (!result) return BadRequest("Problem deleting the cart");
-
-            return Ok(result);
+            return !result ? BadRequest("Problem deleting the cart") : Ok();
         }
     }
 }

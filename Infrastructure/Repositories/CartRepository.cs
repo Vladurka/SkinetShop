@@ -18,13 +18,11 @@ public class CartRepository(IConnectionMultiplexer redis) : ICartRepository
     public async Task<ShoppingCart?> SetCartAsync(ShoppingCart cart)
     {
         var created = await _database.StringSetAsync(cart.Id.ToString(),
-       JsonSerializer.Serialize(cart), TimeSpan.FromDays(30));
+        JsonSerializer.Serialize(cart), TimeSpan.FromDays(30));
 
         return created ? await GetCartAsync(cart.Id.ToString()) : null;
     }
 
-    public async Task<bool> DeleteCartAsync(string key)
-    {
-        return await _database.KeyDeleteAsync(key);
-    }
+    public async Task<bool> DeleteCartAsync(string key) =>
+        await _database.KeyDeleteAsync(key);
 }
