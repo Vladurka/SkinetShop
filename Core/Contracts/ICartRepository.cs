@@ -1,4 +1,4 @@
-﻿namespace Core.Enities.Service.Interfaces
+﻿namespace Core.Enities.Service.Contracts
 {
     public interface ICartRepository
     {

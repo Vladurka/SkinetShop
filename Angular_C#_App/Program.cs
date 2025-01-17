@@ -1,4 +1,5 @@
-using Core.Enities.Service.Interfaces;
+using Core.Enities;
+using Core.Enities.Service.Contracts;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -28,6 +29,11 @@ builder.Services.AddSingleton<ICartRepository, CartRepository>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+    .AddEntityFrameworkStores<StoreContext>();
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -38,6 +44,7 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
     .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<AppUser>();
 
 try
 {

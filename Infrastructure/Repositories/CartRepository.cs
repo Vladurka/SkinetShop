@@ -1,5 +1,5 @@
 using Core.Enities;
-using Core.Enities.Service.Interfaces;
+using Core.Enities.Service.Contracts;
 using StackExchange.Redis;
 using System.Text.Json;
 
