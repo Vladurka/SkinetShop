@@ -21,7 +21,7 @@ This project follows a monolithic architecture where all business logic, data ac
 1. **Presentation Layer** – Angular-based frontend for user interactions
 2. **Application Layer** – Business logic implementation in .NET
 3. **Data Layer** – Entity Framework Core for database operations
-4. **Security Layer** – User authentication and role-based authorization
+4. **Domain Layer** – Models
 
 ## 🎯 Project Goal
 To develop a scalable and maintainable e-commerce platform that provides a seamless shopping experience for customers while ensuring high performance and reliability.
