@@ -11,7 +11,7 @@ This project is a web application for online sales of skiing equipment, develope
 
 ## 🏗️ Technologies
 The project utilizes modern technologies:
-- **Backend:** .NET 8 (ASP.NET Core Web Api, Entity Framework Core)
+- **Backend:** .NET 8 (ASP.NET Core Web API, Entity Framework Core)
 - **Frontend:** Angular
 - **Database:** PostgreSQL
 - **Authentication:** JWT
