@@ -1,0 +1,24 @@
+﻿services:
+  database:
+    image: postgres:latest
+    container_name: database
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: MainDb
+    volumes:
+      - database_data:/var/lib/postgresql/data
+  
+  basketRedis:
+    image: redis:latest
+    ports:
+      - "6382:6379"
+    volumes:
+      - "basketRedis-data:/data"
+
+volumes:
+  database_data:
+  basketRedis-data:
+    

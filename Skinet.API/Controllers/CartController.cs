@@ -33,8 +33,8 @@ namespace Skinet.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteCart(Guid id)
         {
-            var result = await repo.DeleteCartAsync(id.ToString());
-            return !result ? BadRequest("Problem deleting the cart") : Ok();
+            await repo.DeleteCartAsync(id.ToString());
+            return Ok();
         }
     }
 }

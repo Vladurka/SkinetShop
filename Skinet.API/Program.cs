@@ -5,26 +5,16 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Skinet.Middleware;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StoreContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection"));
-});
+{ opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")); });
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var redisConfig = builder.Configuration.GetSection("RedisConnection");
-    return ConnectionMultiplexer.Connect(new ConfigurationOptions
-    {
-        EndPoints = { { redisConfig["Host"], int.Parse(redisConfig["Port"]) } },
-        User = redisConfig["User"],
-        Password = redisConfig["Password"]
-    });
-});
+builder.Services.AddStackExchangeRedisCache(options =>
+{ options.Configuration = builder.Configuration.GetConnectionString("RedisConnection"); });
+
 builder.Services.AddSingleton<ICartRepository, CartRepository>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
