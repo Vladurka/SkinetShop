@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35410.144
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angular_C#_App", "Angular_C#_App\Angular_C#_App.csproj", "{025C9FB8-EA33-46C2-92BA-694D47B4AB31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skinet.API", "Skinet.API\Skinet.API.csproj", "{025C9FB8-EA33-46C2-92BA-694D47B4AB31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{524F8E5C-FB55-4640-BF58-C9931FFB01FB}"
 EndProject

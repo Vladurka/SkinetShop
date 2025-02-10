@@ -5,7 +5,7 @@ using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Shop_App.Controllers
+namespace Skinet.Controllers
 {
     public class ProductsController(IEntityRepository<Product> repo, StoreContext context) : BaseApiController
     {

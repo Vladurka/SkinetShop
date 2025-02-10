@@ -1,4 +1,4 @@
-﻿namespace Shop_App.Errors
+﻿namespace Skinet.Errors
 {
     public class ApiErrorResponse(int statusCode, string message, 
         string? details)

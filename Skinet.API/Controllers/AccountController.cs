@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace Shop_App.Controllers
+namespace Skinet.Controllers
 {
     public class AccountController(SignInManager<AppUser> signInManager) : BaseApiController
     {

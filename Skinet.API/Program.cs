@@ -4,7 +4,7 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Shop_App.Middleware;
+using Skinet.Middleware;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);

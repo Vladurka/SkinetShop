@@ -2,7 +2,7 @@
 using Core.Enities.Service.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Shop_App.Controllers
+namespace Skinet.Controllers
 {
     public class CartController(ICartRepository repo) : BaseApiController
     {

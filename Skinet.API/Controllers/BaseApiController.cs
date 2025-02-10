@@ -1,9 +1,9 @@
 ﻿using Core.Enities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Shop_App.RequestHelpers;
+using Skinet.RequestHelpers;
 
-namespace Shop_App.Controllers
+namespace Skinet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,8 +1,8 @@
-﻿using Shop_App.Errors;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using Skinet.Errors;
 
-namespace Shop_App.Middleware
+namespace Skinet.Middleware
 {
     public class ExceptionMiddleware(IHostEnvironment env, RequestDelegate next)
     {

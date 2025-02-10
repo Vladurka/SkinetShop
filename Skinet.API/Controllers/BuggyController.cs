@@ -1,7 +1,7 @@
 ﻿using Core.Enities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Shop_App.Controllers
+namespace Skinet.Controllers
 {
     public class BuggyController : BaseApiController
     {
