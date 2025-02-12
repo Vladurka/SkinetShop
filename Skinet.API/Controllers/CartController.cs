@@ -10,13 +10,8 @@ namespace Skinet.Controllers
         public async Task<ActionResult<ShoppingCart>> GetCart(Guid id)
         {
             var cart = await repo.GetCartAsync(id.ToString());
-
-            if (cart == null)
-            {
-                cart = new ShoppingCart { Id = id };
-                await repo.SetCartAsync(cart);
-            }
-            return Ok(cart);
+            
+            return Ok(cart ?? new ShoppingCart { Id = id });
         }
 
         [HttpPost]
@@ -33,7 +28,11 @@ namespace Skinet.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteCart(Guid id)
         {
-            await repo.DeleteCartAsync(id.ToString());
+            var result = await repo.DeleteCartAsync(id.ToString());
+
+            if (!result)
+                return BadRequest("Problem with deleting the cart");
+            
             return Ok();
         }
     }

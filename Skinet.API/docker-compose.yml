@@ -10,15 +10,14 @@
       POSTGRES_DB: MainDb
     volumes:
       - database_data:/var/lib/postgresql/data
-  
+
   basketRedis:
     image: redis:latest
     ports:
-      - "6382:6379"
+      - "6379:6379"
     volumes:
       - "basketRedis-data:/data"
 
 volumes:
   database_data:
   basketRedis-data:
-    

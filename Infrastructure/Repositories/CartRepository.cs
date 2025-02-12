@@ -1,27 +1,31 @@
 using Core.Enities;
 using Core.Enities.Service.Contracts;
 using System.Text.Json;
-using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 
 namespace Infrastructure.Repositories;
 
-public class CartRepository(IDistributedCache redis) : ICartRepository
+public class CartRepository(IConnectionMultiplexer redis) : ICartRepository
 {
+    private readonly IDatabase _database = redis.GetDatabase();
+
+    public async Task<bool> DeleteCartAsync(string key) =>
+        await _database.KeyDeleteAsync(key);
+
     public async Task<ShoppingCart?> GetCartAsync(string key)
     {
-        string? data = await redis.GetStringAsync(key);
+        var data = await _database.StringGetAsync(key);
 
-        return string.IsNullOrEmpty(data) ? null : JsonSerializer.Deserialize<ShoppingCart>(data);
+        return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<ShoppingCart>(data!);
     }
 
     public async Task<ShoppingCart?> SetCartAsync(ShoppingCart cart)
     {
-        await redis.SetStringAsync(cart.Id.ToString(), JsonSerializer.Serialize(cart), new DistributedCacheEntryOptions
-        { AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30) });
+        var created = await _database.StringSetAsync(cart.Id.ToString(),
+            JsonSerializer.Serialize(cart), TimeSpan.FromDays(30));
+    
+        if (!created) return null;
 
         return await GetCartAsync(cart.Id.ToString());
     }
-
-    public async Task DeleteCartAsync(string key) =>
-        await redis.RemoveAsync(key);
 }

@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Skinet.Middleware;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<StoreContext>(opt =>
 { opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")); });
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{ options.Configuration = builder.Configuration.GetConnectionString("RedisConnection"); });
+builder.Services.AddSingleton<IConnectionMultiplexer>(config => 
+{
+    var connString = builder.Configuration.GetConnectionString("RedisConnection") 
+                     ?? throw new Exception("Cannot get redis connection string");
+    var configuration = ConfigurationOptions.Parse(connString, true);
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
 
 builder.Services.AddSingleton<ICartRepository, CartRepository>();
 

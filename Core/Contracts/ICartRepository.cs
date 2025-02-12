@@ -4,6 +4,6 @@
     {
         public Task<ShoppingCart?> GetCartAsync(string key);
         public Task<ShoppingCart?> SetCartAsync(ShoppingCart cart);
-        public Task DeleteCartAsync(string key);
+        public Task<bool> DeleteCartAsync(string key);
     }
 }
