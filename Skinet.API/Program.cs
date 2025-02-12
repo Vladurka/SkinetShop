@@ -21,7 +21,6 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
     return ConnectionMultiplexer.Connect(configuration);
 });
 
-
 builder.Services.AddSingleton<ICartRepository, CartRepository>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
