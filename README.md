@@ -26,4 +26,4 @@ This project follows a monolithic architecture where all business logic, data ac
 ## 🎯 Project Goal
 To develop a scalable and maintainable e-commerce platform that provides a seamless shopping experience for customers while ensuring high performance and reliability.
 
-<img src="https://ibb.co/LWZHShX" height="40px" length="100px"/>
+![Photo]([https://your-image-link.com/image.jpg](https://imgur.com/a/2OGCdDA))
