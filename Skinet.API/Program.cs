@@ -13,9 +13,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<StoreContext>(opt =>
 { opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")); });
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(config => 
+builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 {
-    var connString = builder.Configuration.GetConnectionString("RedisConnection") 
+    var connString = builder.Configuration.GetConnectionString("RedisConnection")
                      ?? throw new Exception("Cannot get redis connection string");
     var configuration = ConfigurationOptions.Parse(connString, true);
     return ConnectionMultiplexer.Connect(configuration);
