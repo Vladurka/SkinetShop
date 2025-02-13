@@ -8,7 +8,6 @@ public static class AddressMappingExtensions
     public static AddressDto? ToDto(this Address? address)
     {
         if (address == null) return null;
-
         return new AddressDto
         {
             Line1 = address.Line1,

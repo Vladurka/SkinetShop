@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Core.Enities;
+﻿namespace Core.Enities;
 
 public class Address : BaseEntity
 {

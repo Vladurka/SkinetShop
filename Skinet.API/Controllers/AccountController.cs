@@ -50,13 +50,14 @@ namespace Skinet.Controllers
         {
             if (User.Identity?.IsAuthenticated == false) return NoContent();
 
-            var user = await signInManager.UserManager.GetUserByEmail(User);
+            var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
 
             return Ok(new
             {
                 user.FirstName,
                 user.LastName,
                 user.Email,
+                Address = user.Address?.ToDto()
             });
         }
 
@@ -70,7 +71,7 @@ namespace Skinet.Controllers
         {
             var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
 
-            if (user.Address == null) 
+            if (user.Address == null)
                 user.Address = addressDto.ToEntity();
             
             else 

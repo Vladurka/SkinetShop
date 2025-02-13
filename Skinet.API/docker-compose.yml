@@ -5,9 +5,9 @@
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: MainDb
+      POSTGRES_USER: Vlad
+      POSTGRES_PASSWORD: postgres2025
+      POSTGRES_DB: Main
     volumes:
       - database_data:/var/lib/postgresql/data
 
