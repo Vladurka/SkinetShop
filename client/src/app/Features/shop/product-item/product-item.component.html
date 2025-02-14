@@ -1,7 +1,7 @@
 @if(product){
-  <div class="w-[200px] text-center border mb-3">
-    <mat-card appearance="raised" routerLink="/shop/{{product.id}}" class="rounded-sm">
-      <img src="{{product.pictureUrl}}" alt="Image of {{product.name}}">
+  <div class="w-[250px] text-center border mb-3 rounded-md">
+    <mat-card appearance="raised" routerLink="/shop/{{product.id}}" class="rounded-md">
+      <img src="{{product.pictureUrl}}" alt="Image of {{product.name}}" class="rounded-md">
 
       <mat-card-content>
         <h2 class="text-sm font-semibold uppercase">{{product.name}}</h2>

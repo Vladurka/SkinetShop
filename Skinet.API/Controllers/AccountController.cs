@@ -26,7 +26,7 @@ namespace Skinet.Controllers
 
             if (!result.Succeeded)
             {
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                     ModelState.AddModelError(error.Code, error.Description);
 
                 return ValidationProblem();
@@ -61,9 +61,9 @@ namespace Skinet.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("auth-status")]
         public ActionResult GetAuthState() =>
-            Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
+            Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false });
 
         [Authorize]
         [HttpPost("address")]
@@ -73,8 +73,8 @@ namespace Skinet.Controllers
 
             if (user.Address == null)
                 user.Address = addressDto.ToEntity();
-            
-            else 
+
+            else
                 user.Address.UpdateFromDto(addressDto);
 
             var result = await signInManager.UserManager.UpdateAsync(user);
