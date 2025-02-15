@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Skinet.Controllers
 {
-    public class ProductsController(IEntityRepository<Product> repo, StoreContext context) : BaseApiController
+    public class ProductsController(IGenericRepository<Product> repo, StoreContext context) : BaseApiController
     {
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)

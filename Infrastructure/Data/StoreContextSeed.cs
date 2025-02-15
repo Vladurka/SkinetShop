@@ -7,9 +7,9 @@ namespace Infrastructure.Data
 {
     public class StoreContextSeed
     {
-        public static async Task SeedAsync(StoreContext storeContext)
+        public static async Task SeedAsync(StoreContext context)
         {
-            if (!await storeContext.Products.AnyAsync())
+            if (!await context.Products.AnyAsync())
             {
                 var productsData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/products.json");
 
@@ -17,9 +17,23 @@ namespace Infrastructure.Data
 
                 if(products == null) return;
 
-                storeContext.Products.AddRange(products);
+                context.Products.AddRange(products);
 
-                await storeContext.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
+            
+            if (!await context.DeliveryMethods.AnyAsync())
+            {   
+                var dmData = await File
+                    .ReadAllTextAsync("../Infrastructure/Data/SeedData/delivery.json");
+
+                var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
+
+                if (methods == null) return;
+
+                context.DeliveryMethods.AddRange(methods);
+
+                await context.SaveChangesAsync();
             }
         }
     }

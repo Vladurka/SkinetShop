@@ -2,7 +2,7 @@
 
 namespace Core.Interfaces
 {
-    public interface IEntityRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : BaseEntity
     {
         public Task<T> GetByIdAsync(Guid id);
         public Task<IReadOnlyList<T>> ListAllAsync();

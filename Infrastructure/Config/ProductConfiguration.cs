@@ -14,7 +14,7 @@ namespace Infrastructure.Config
             builder.Property(x => x.PictureUrl).IsRequired();
             builder.Property(x => x.Type).IsRequired();
             builder.Property(x => x.Brand).IsRequired();
-            builder.Property(x => x.QuantityInStock).IsRequired();
+            builder.Property(x => x.Quantity).IsRequired();
         }
     }
 }

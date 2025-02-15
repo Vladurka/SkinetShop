@@ -6,7 +6,7 @@
     "PictureUrl": "/images/products/sb-ang1.png",
     "Type": "Boards",
     "Brand": "Angular",
-    "QuantityInStock": 82
+    "Quantity": 82
   },
   {
     "Name": "Green Angular Board 3000",
@@ -15,7 +15,7 @@
     "PictureUrl": "/images/products/sb-ang2.png",
     "Type": "Boards",
     "Brand": "Angular",
-    "QuantityInStock": 75
+    "Quantity": 75
   },
   {
     "Name": "Core Board Speed Rush 3",
@@ -24,7 +24,7 @@
     "PictureUrl": "/images/products/sb-core1.png",
     "Type": "Boards",
     "Brand": "NetCore",
-    "QuantityInStock": 3
+    "Quantity": 3
   },
   {
     "Name": "Net Core Super Board",
@@ -33,7 +33,7 @@
     "PictureUrl": "/images/products/sb-core2.png",
     "Type": "Boards",
     "Brand": "NetCore",
-    "QuantityInStock": 52
+    "Quantity": 52
   },
   {
     "Name": "React Board Super Whizzy Fast",
@@ -42,7 +42,7 @@
     "PictureUrl": "/images/products/sb-react1.png",
     "Type": "Boards",
     "Brand": "React",
-    "QuantityInStock": 97
+    "Quantity": 97
   },
   {
     "Name": "Typescript Entry Board",
@@ -51,7 +51,7 @@
     "PictureUrl": "/images/products/sb-ts1.png",
     "Type": "Boards",
     "Brand": "Typescript",
-    "QuantityInStock": 37
+    "Quantity": 37
   },
   {
     "Name": "Core Blue Hat",
@@ -60,7 +60,7 @@
     "PictureUrl": "/images/products/hat-core1.png",
     "Type": "Hats",
     "Brand": "NetCore",
-    "QuantityInStock": 32
+    "Quantity": 32
   },
   {
     "Name": "Green React Woolen Hat",
@@ -69,7 +69,7 @@
     "PictureUrl": "/images/products/hat-react1.png",
     "Type": "Hats",
     "Brand": "React",
-    "QuantityInStock": 6
+    "Quantity": 6
   },
   {
     "Name": "Purple React Woolen Hat",
@@ -78,7 +78,7 @@
     "PictureUrl": "/images/products/hat-react2.png",
     "Type": "Hats",
     "Brand": "React",
-    "QuantityInStock": 17
+    "Quantity": 17
   },
   {
     "Name": "Blue Code Gloves",
@@ -87,7 +87,7 @@
     "PictureUrl": "/images/products/glove-code1.png",
     "Type": "Gloves",
     "Brand": "VS Code",
-    "QuantityInStock": 74
+    "Quantity": 74
   },
   {
     "Name": "Green Code Gloves",
@@ -96,7 +96,7 @@
     "PictureUrl": "/images/products/glove-code2.png",
     "Type": "Gloves",
     "Brand": "VS Code",
-    "QuantityInStock": 19
+    "Quantity": 19
   },
   {
     "Name": "Purple React Gloves",
@@ -105,7 +105,7 @@
     "PictureUrl": "/images/products/glove-react1.png",
     "Type": "Gloves",
     "Brand": "React",
-    "QuantityInStock": 77
+    "Quantity": 77
   },
   {
     "Name": "Green React Gloves",
@@ -114,7 +114,7 @@
     "PictureUrl": "/images/products/glove-react2.png",
     "Type": "Gloves",
     "Brand": "React",
-    "QuantityInStock": 45
+    "Quantity": 45
   },
   {
     "Name": "Redis Red Boots",
@@ -123,7 +123,7 @@
     "PictureUrl": "/images/products/boot-redis1.png",
     "Type": "Boots",
     "Brand": "Redis",
-    "QuantityInStock": 49
+    "Quantity": 49
   },
   {
     "Name": "Core Red Boots",
@@ -132,7 +132,7 @@
     "PictureUrl": "/images/products/boot-core2.png",
     "Type": "Boots",
     "Brand": "NetCore",
-    "QuantityInStock": 28
+    "Quantity": 28
   },
   {
     "Name": "Core Purple Boots",
@@ -141,7 +141,7 @@
     "PictureUrl": "/images/products/boot-core1.png",
     "Type": "Boots",
     "Brand": "NetCore",
-    "QuantityInStock": 69
+    "Quantity": 69
   },
   {
     "Name": "Angular Purple Boots",
@@ -150,7 +150,7 @@
     "PictureUrl": "/images/products/boot-ang2.png",
     "Type": "Boots",
     "Brand": "Angular",
-    "QuantityInStock": 35
+    "Quantity": 35
   },
   {
     "Name": "Angular Blue Boots",
@@ -159,6 +159,6 @@
     "PictureUrl": "/images/products/boot-ang1.png",
     "Type": "Boots",
     "Brand": "Angular",
-    "QuantityInStock": 27
+    "Quantity": 27
   }
 ]

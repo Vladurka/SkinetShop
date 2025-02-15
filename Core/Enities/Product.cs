@@ -23,11 +23,11 @@ namespace Core.Enities
         public string Brand { get; set; } = string.Empty;
 
         [Range(0, int.MaxValue)]
-        public int QuantityInStock { get; set; }
+        public int Quantity { get; set; }
 
         public Product(string name, string descriptor, 
             decimal price, string pictureUrl, 
-            string type, string brand, int quantityInStock)
+            string type, string brand, int quantity)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -36,7 +36,7 @@ namespace Core.Enities
             PictureUrl = pictureUrl;
             Type = type;
             Brand = brand;
-            QuantityInStock = quantityInStock;
+            Quantity = quantity;
         }
     }
 }

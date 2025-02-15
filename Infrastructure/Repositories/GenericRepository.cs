@@ -5,7 +5,7 @@ using Core.Interfaces;
 
 namespace Infrastructure.Repositories
 {
-    public class EntityRepository<T>(StoreContext context) : IEntityRepository<T> where T : BaseEntity
+    public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> where T : BaseEntity
     {
         public async Task AddAsync(T entity)
         {

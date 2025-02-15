@@ -1,6 +1,7 @@
 using Core.Enities;
 using Core.Enities.Service.Contracts;
 using Core.Interfaces;
+using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 builder.Services.AddSingleton<ICartRepository, CartRepository>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
