@@ -30,6 +30,6 @@ export class CartItemComponent {
   }
 
   removeItemFromCart(){
-    this.cartService.removeItemFromCart(this.item().id, this.item().quantityInStock);
+    this.cartService.removeItemFromCart(this.item().id, this.item().quantity);
   }
 }

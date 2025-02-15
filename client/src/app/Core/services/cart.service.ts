@@ -15,13 +15,13 @@ export class CartService {
   private http = inject(HttpClient);
   cart = signal<Cart | null>(null);
   itemCount = computed(() => {
-    return this.cart()?.items.reduce((sum, item) => sum + item.quantityInStock, 0)
+    return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0)
   })
 
   itemsPrice = computed(() => {
     const cart = this.cart();
     if(!cart) return null;
-    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantityInStock, 0)
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
     const discount = 25;
     const shipping = 15;
     return{
@@ -70,8 +70,8 @@ export class CartService {
     if(!cart) return;
     const index = cart.items.findIndex((x) => x.id === productId);
     if(index !== -1){
-      if(cart.items[index].quantityInStock > 0){
-        cart.items[index].quantityInStock -= quantity;
+      if(cart.items[index].quantity > 0){
+        cart.items[index].quantity -= quantity;
       }
       else{
         cart.items.splice(index, 1);
@@ -98,11 +98,11 @@ export class CartService {
     const index = items.findIndex((x) => x.id === item.id);
 
     if (index === -1) {
-      items.push({ ...item, quantityInStock: quantity });
+      items.push({ ...item, quantity: quantity });
     } else {
       items[index] = {
         ...items[index],
-        quantityInStock: items[index].quantityInStock + quantity,
+        quantity: items[index].quantity + quantity,
       };
     }
 

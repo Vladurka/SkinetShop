@@ -65,7 +65,7 @@ export class ProductDetailsComponent {
    }
 
    updateQuantityInCart(){
-    this.quantityInCart = this.cartService.cart()?.items.find(x => x.id === this.product?.id)?.quantityInStock || 0;
+    this.quantityInCart = this.cartService.cart()?.items.find(x => x.id === this.product?.id)?.quantity || 0;
     this.quantity = this.quantityInCart || 1;
    }
 
