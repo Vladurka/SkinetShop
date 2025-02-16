@@ -12,6 +12,9 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { firstValueFrom } from 'rxjs';
 import { AccountService } from '../../Core/services/account.service';
 import { CheckoutDeliveryComponent } from "./checkout-delivery/checkout-delivery.component";
+import { CheckoutReviewComponent } from "./checkout-review/checkout-review.component";
+import { CartService } from '../../Core/services/cart.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -21,7 +24,9 @@ import { CheckoutDeliveryComponent } from "./checkout-delivery/checkout-delivery
     MatButton,
     RouterLink,
     MatCheckbox,
-    CheckoutDeliveryComponent
+    CheckoutDeliveryComponent,
+    CheckoutReviewComponent,
+    CurrencyPipe
 ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
@@ -30,6 +35,7 @@ export class CheckoutComponent implements OnInit, OnDestroy{
   private stripedService = inject(StripeService);
   private snackbar = inject(SnackbarService);
   private accountService = inject(AccountService);
+  cartService = inject(CartService);
   addressElement?: StripeAddressElement;
   paymentElement?: StripePaymentElement;
   saveAddress = false;
