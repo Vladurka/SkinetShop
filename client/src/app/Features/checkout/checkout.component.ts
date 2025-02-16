@@ -1,11 +1,11 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { OrderSummaryComponent } from "../../Shared/components/order-summary/order-summary.component";
 import { Address } from '../../Shared/models/user';
-import {MatStepperModule} from "@angular/material/stepper"
+import {MatStepper, MatStepperModule} from "@angular/material/stepper"
 import { MatButton } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { StripeService } from '../../Core/services/stripe.service';
-import { StripeAddressElement, StripeAddressElementChangeEvent, StripePaymentElement, StripePaymentElementChangeEvent } from '@stripe/stripe-js';
+import { ConfirmationToken, StripeAddressElement, StripeAddressElementChangeEvent, StripePaymentElement, StripePaymentElementChangeEvent } from '@stripe/stripe-js';
 import { SnackbarService } from '../../Core/services/snackbar.service';
 import {MatCheckbox, MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -14,7 +14,8 @@ import { AccountService } from '../../Core/services/account.service';
 import { CheckoutDeliveryComponent } from "./checkout-delivery/checkout-delivery.component";
 import { CheckoutReviewComponent } from "./checkout-review/checkout-review.component";
 import { CartService } from '../../Core/services/cart.service';
-import { CurrencyPipe, JsonPipe } from '@angular/common';
+import { CurrencyPipe} from '@angular/common';
+import {MatProgressSpinner, MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-checkout',
@@ -27,7 +28,7 @@ import { CurrencyPipe, JsonPipe } from '@angular/common';
     CheckoutDeliveryComponent,
     CheckoutReviewComponent,
     CurrencyPipe,
-    JsonPipe
+    MatProgressSpinnerModule
 ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
@@ -36,11 +37,15 @@ export class CheckoutComponent implements OnInit, OnDestroy{
   private stripedService = inject(StripeService);
   private snackbar = inject(SnackbarService);
   private accountService = inject(AccountService);
+  private router = inject(Router);
   cartService = inject(CartService);
   addressElement?: StripeAddressElement;
   paymentElement?: StripePaymentElement;
   saveAddress = false;
-  completionStatus = signal<{address: boolean, card: boolean, delivery: boolean}>({address: false, card: false, delivery: false})
+  completionStatus = signal<{address: boolean, card: boolean, delivery: boolean}>({address: false, card: false, delivery: false});
+
+  confirmationToken?: ConfirmationToken;
+  loading = true;
 
   constructor(){
     this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -82,6 +87,24 @@ export class CheckoutComponent implements OnInit, OnDestroy{
     });
   }
 
+  async getConfirmationToken(){
+    this.loading = true;
+    try{
+      if(Object.values(this.completionStatus()).every(status => status === true)){
+        const result = await this.stripedService.createConfirmationToken();
+        if(result.error) throw new Error(result.error.message);
+        this.confirmationToken = result.confirmationToken;
+        console.log(this.confirmationToken);
+      }
+    }
+    catch(error: any){
+      this.snackbar.error(error.message);
+    }
+    finally{
+      this.loading = false;
+    }
+  }
+
   async onStepChanged(event: StepperSelectionEvent){
     if(event.selectedIndex === 1){
       if(this.saveAddress){
@@ -90,7 +113,30 @@ export class CheckoutComponent implements OnInit, OnDestroy{
       }
     }
     if(event.selectedIndex === 2){
-      await firstValueFrom(this.stripedService.createOrUpdatePaymentEvent());
+      await firstValueFrom(this.stripedService.createOrUpdatePaymentIntent());
+    }
+    if(event.selectedIndex === 3){
+      await this.getConfirmationToken();
+    }
+  }
+
+  async confirmPayment(stepper: MatStepper){
+    try{
+      if(this.confirmationToken){
+        const result = await this.stripedService.confirmPayment(this.confirmationToken);
+        if(result.error){
+          throw new Error(result.error.message)
+        }
+        else{
+          this.cartService.deleteCart();
+          this.cartService.selectedDelivery.set(null);
+          this.router.navigateByUrl("checkout/success");
+        }
+      }
+    }
+    catch(error: any){
+      this.snackbar.error(error.message || "Something went wrong");
+      stepper.previous();
     }
   }
 

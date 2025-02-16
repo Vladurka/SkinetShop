@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import {loadStripe, Stripe, StripeAddressElement, StripeAddressElementOptions, StripeElements, StripePaymentElement} from "@stripe/stripe-js"
+import {ConfirmationToken, loadStripe, Stripe, StripeAddressElement, StripeAddressElementOptions, StripeElements, StripePaymentElement} from "@stripe/stripe-js"
 import { environment } from '../../../environments/environment';
 import { CartService } from './cart.service';
 import { HttpClient } from '@angular/common/http';
@@ -32,7 +32,7 @@ export class StripeService {
     if(!this.elements){
       const stripe = await this.getStripeInstance();
       if(stripe){
-        const cart = await firstValueFrom(this.createOrUpdatePaymentEvent());
+        const cart = await firstValueFrom(this.createOrUpdatePaymentIntent());
         this.elements = stripe.elements(
           {clientSecret: cart.clientSecret, appearance:{labels:"floating"}})
       }
@@ -90,15 +90,47 @@ export class StripeService {
     return this.addressElement;
   }
 
-  createOrUpdatePaymentEvent(){
+  async createConfirmationToken(){
+    const stripe = await this.getStripeInstance();
+    const elements = await this.initializeElements();
+    const result = await elements.submit();
+    if(result.error) throw new Error(result.error.message);
+    if(stripe){
+      return await stripe.createConfirmationToken({elements});
+    }
+    else{
+      throw new Error("Stripe is not available");
+    }
+  }
+
+  async confirmPayment(confirmationToken: ConfirmationToken){
+    const stripe = await this.getStripeInstance();
+    const elements = await this.initializeElements();
+    const result = await elements.submit();
+    if(result.error) throw new Error(result.error.message);
+
+    const clientSecret = this.cartService.cart()?.clientSecret;
+
+    if(stripe && clientSecret){
+      return await stripe.confirmPayment({
+        clientSecret: clientSecret,
+        confirmParams:{
+          confirmation_token: confirmationToken.id
+        },
+        redirect: "if_required"
+      });
+    }
+    else throw new Error("Unable to load stripe");
+  }
+
+  createOrUpdatePaymentIntent(){
     const cart = this.cartService.cart();
     if(!cart) throw new Error("Problem with cart");
     return this.http.post<Cart>(this.baseUrl + "payments/" + cart.id, {}).pipe(
       map(cart => {
         this.cartService.setCart(cart);
         return cart;
-    })
-    );
+    }));
   }
 
   disposeElements(){

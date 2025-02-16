@@ -89,10 +89,11 @@ export class CartService {
   }
 
   deleteCart() {
-   this.http.delete(this.baseUrl + 'cart?id=' + this.cart()?.id).subscribe({
+   this.http.delete(this.baseUrl + 'cart/' + this.cart()?.id).subscribe({
     next: () =>{
       localStorage.removeItem('cart_id')
       this.cart.set(null);
+      console.log("Cart deleted");
     }
    })
   }
