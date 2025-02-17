@@ -12,6 +12,10 @@ namespace Core.Specifications
 
         public Expression<Func<T, object>>? OrderByDesc { get; private set; }
 
+        public List<Expression<Func<T, object>>> Includes { get; } = [];
+
+        public List<string> IncludeStrings { get; } = [];
+
         public bool IsDistinct { get; private set; }
 
         public int Take { get; private set; }
@@ -27,6 +31,12 @@ namespace Core.Specifications
 
            return query;
         }
+
+        protected void AddInclude(Expression<Func<T, object>> includeExpression) =>
+            Includes.Add(includeExpression);
+        
+        protected void AddInclude(string includeString) =>
+            IncludeStrings.Add(includeString);
 
         protected void AddOrderBy(Expression<Func<T, object>> orderByExpression) =>
             OrderBy = orderByExpression;

@@ -7,11 +7,8 @@ namespace Infrastructure.Repositories
 {
     public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> where T : BaseEntity
     {
-        public async Task AddAsync(T entity)
-        {
+        public async Task AddAsync(T entity) =>
             context.Set<T>().Add(entity);
-            await SaveChangesAsync();
-        }
 
         public async Task<IReadOnlyList<T>> ListAllAsync() =>
              await context.Set<T>().ToListAsync();
@@ -44,14 +41,11 @@ namespace Infrastructure.Repositories
 
             context.Set<T>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
-
-            await SaveChangesAsync();
         }
         public async Task RemoveAsync(Guid id)
         {
             var product = await GetByIdAsync(id);
             context.Set<T>().Remove(product);
-            await SaveChangesAsync();
         }
 
         public async Task<int> CountAsync(ISpecification<T> spec)
@@ -70,11 +64,5 @@ namespace Infrastructure.Repositories
 
         private async Task<bool> ExistsIdAsync(Guid id) =>
            await context.Set<T>().AnyAsync(x => x.Id == id);
-
-        private async Task SaveChangesAsync()
-        {
-            if (await context.SaveChangesAsync() <= 0)
-                throw new InvalidOperationException("Could not save changes");
-        }
     }
 }

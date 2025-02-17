@@ -1,6 +1,10 @@
-﻿namespace Core.Contracts;
+﻿using Core.Enities;
+using Core.Interfaces;
 
-public class IUnitOfWork
+namespace Core.Contracts;
+
+public interface IUnitOfWork : IDisposable
 {
-    
+    public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
+    public Task<bool> Complete();
 }

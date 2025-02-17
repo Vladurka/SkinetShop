@@ -1,4 +1,5 @@
-﻿using Core.Enities;
+﻿using Core.Contracts;
+using Core.Enities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Skinet.Controllers;
 
 public class PaymentsController(IPaymentService paymentService, 
-    IGenericRepository<DeliveryMethod> dmRepo) : BaseApiController
+    IUnitOfWork unit) : BaseApiController
 {
     [Authorize]
     [HttpPost("{cartId:guid}")]
@@ -22,6 +23,6 @@ public class PaymentsController(IPaymentService paymentService,
     [HttpGet("delivery-methods")]
     public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
     {
-        return Ok(await dmRepo.ListAllAsync()); 
+        return Ok(await unit.Repository<DeliveryMethod>().ListAllAsync()); 
     }
 }

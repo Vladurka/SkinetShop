@@ -1,6 +1,8 @@
 ﻿namespace Core.Enities.OrderAggregates;
 
-public class OrderStatus
+public enum OrderStatus
 {
-    
+    Pending,
+    PaymentReceived,
+    PaymentFailed
 }

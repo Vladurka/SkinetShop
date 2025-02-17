@@ -1,103 +1,75 @@
-﻿using Core.Interfaces;
+﻿using Core.Contracts;
 using Core.Enities;
 using Microsoft.AspNetCore.Mvc;
 using Core.Specifications;
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Skinet.Controllers
 {
-    public class ProductsController(IGenericRepository<Product> repo, StoreContext context) : BaseApiController
+    public class ProductsController(IUnitOfWork unit) : BaseApiController
     {
         [HttpPost]
         public async Task<ActionResult> AddProduct(Product product)
         {
-            if(await ExistsNameAsync(product.Name))
-                return BadRequest();
+            await unit.Repository<Product>().AddAsync(product);
+            
+            if(await unit.Complete())
+                return Ok();
 
-            await repo.AddAsync(product);
-            return Ok();
-        }
-
-        [HttpPost("AddProducts")]
-        public async Task<ActionResult> AddProducts(Product[] products)
-        {
-            foreach (var product in products)
-                await repo.AddAsync(product);
-
-            return Ok();
+            return BadRequest("Not created");
         }
 
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
             ([FromQuery] ProductSpecParams specParams)
         {
-            try
-            {
-                var spec = new ProductSpecification(specParams);
+            var spec = new ProductSpecification(specParams);
 
-                return await CreatePagedResult(repo, spec, specParams.PageIndex,
-                    specParams.PageSize);
-            }
+            return await CreatePagedResult(unit.Repository<Product>(), spec, specParams.PageIndex,
+                specParams.PageSize);
 
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
             var spec = new BrandListSpecification();
-            return Ok(await repo.ListAsync(spec));
+            return Ok(await unit.Repository<Product>().ListAsync(spec));
         }
 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetTypes()
         {
             var spec = new TypeListSpecification();
-            return Ok(await repo.ListAsync(spec));
+            return Ok(await unit.Repository<Product>().ListAsync(spec));
         }
 
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
-            var product = await repo.GetByIdAsync(id);
+            var product = await unit.Repository<Product>().GetByIdAsync(id);
             return Ok(product);
         }
 
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
-            try
-            {
-                await repo.UpdateAsync(product);
+            await unit.Repository<Product>().UpdateAsync(product);
+            
+            if(await unit.Complete())
                 return Ok(product);
-            }
 
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return BadRequest("Entity not updated");
         }
 
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult> DeleteProduct(Guid id)
         {
-            try
-            {
-                await repo.RemoveAsync(id);
+            await unit.Repository<Product>().RemoveAsync(id);
+            
+            if(await unit.Complete())
                 return NoContent();
-            }
 
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return BadRequest("Product was not deleted");
         }
-
-        private async Task<bool> ExistsNameAsync(string name) =>
-            await context.Products.AnyAsync(x => x.Name == name);
     }
 }

@@ -1,3 +1,4 @@
+using Core.Contracts;
 using Core.Enities;
 using Core.Enities.Service.Contracts;
 using Core.Interfaces;
@@ -27,6 +28,7 @@ builder.Services.AddSingleton<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()

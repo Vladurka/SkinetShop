@@ -1,4 +1,5 @@
-﻿using Core.Enities;
+﻿using Core.Contracts;
+using Core.Enities;
 using Core.Enities.Service.Contracts;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +9,7 @@ using Product = Core.Enities.Product;
 namespace Core.Services;
 
 public class PaymentService(IConfiguration config, ICartRepository cartRepo,
-    IGenericRepository<Product> productRepo, IGenericRepository<DeliveryMethod> dmRepo) : IPaymentService
+    IUnitOfWork unit) : IPaymentService
 {
     public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
     {
@@ -21,7 +22,7 @@ public class PaymentService(IConfiguration config, ICartRepository cartRepo,
 
         if (cart.DeliveryMethodId.HasValue)
         {
-            var deliveryMethod = await dmRepo.GetByIdAsync(cart.DeliveryMethodId.Value);
+            var deliveryMethod = await unit.Repository<DeliveryMethod>().GetByIdAsync(cart.DeliveryMethodId.Value);
             if (deliveryMethod == null) return null;
 
             shippingPrice = deliveryMethod.Price;
@@ -29,7 +30,7 @@ public class PaymentService(IConfiguration config, ICartRepository cartRepo,
 
         foreach (var item in cart.Items)
         {
-            var productItem = await productRepo.GetByIdAsync(item.Id);
+            var productItem = await unit.Repository<Product>().GetByIdAsync(item.Id);
             if (productItem == null) return null;
 
             item.Price = productItem.Price;
