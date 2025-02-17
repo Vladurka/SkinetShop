@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories
     public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> where T : BaseEntity
     {
         public async Task AddAsync(T entity) =>
-            context.Set<T>().Add(entity);
+            await context.Set<T>().AddAsync(entity);
 
         public async Task<IReadOnlyList<T>> ListAllAsync() =>
              await context.Set<T>().ToListAsync();
