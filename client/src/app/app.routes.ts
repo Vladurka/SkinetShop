@@ -21,7 +21,7 @@ export const routes: Routes = [
   {path: 'shop/:id', component: ProductDetailsComponent},
   {path: 'cart', component: CartComponent},
   {path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, cartGuard]},
-  {path: 'checkout/success', component: CheckoutSuccessComponent, canActivate: [authGuard]},
+  {path: 'checkout/success/:id', component: CheckoutSuccessComponent, canActivate: [authGuard]},
   {path: 'orders', component: OrderComponent, canActivate: [authGuard]},
   {path: 'order/:id', component: OrderDetailedComponent, canActivate:[authGuard]},
   {path: 'account/login', component: LoginComponent},

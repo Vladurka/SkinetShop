@@ -1,29 +1,31 @@
-<section class="bg-white py-16">
-  <div class="mx-auto max-w-2xl px-4">
-    <h2 class="font-semibold text-2xl mb-2">Thanks for your fake order</h2>
-    <p class="text-gray-500 mb-8">Your order <span class="font-medium">#42</span>
-    Will never be processed as this a fake shop. We will not notify you once your order has not been shipped.</p>
-    <div class="space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-6 mb-8">
-      <dl class="flex items-center justify-between gap-4">
-        <dt class="font-normal text-gray-500">Date</dt>
-        <dd class="font-medium text-gray-900 text-end">16 Feb 2025</dd>
-      </dl>
-      <dl class="flex items-center justify-between gap-4">
-        <dt class="font-normal text-gray-500">Payment method</dt>
-        <dd class="font-medium text-gray-900 text-end">Visa</dd>
-      </dl>
-      <dl class="flex items-center justify-between gap-4">
-        <dt class="font-normal text-gray-500">Address</dt>
-        <dd class="font-medium text-gray-900 text-end">Address goes here</dd>
-      </dl>
-      <dl class="flex items-center justify-between gap-4">
-        <dt class="font-normal text-gray-500">Amount</dt>
-        <dd class="font-medium text-gray-900 text-end">$100</dd>
-      </dl>
+@if (order) {
+  <section class="bg-white py-16">
+    <div class="mx-auto max-w-2xl px-4">
+      <h2 class="font-semibold text-2xl mb-2">Thanks for your fake order</h2>
+      <p class="text-gray-500 mb-8">Your order <span class="font-medium">#{{order.id}}</span>
+      Will never be processed as this a fake shop. We will not notify you once your order has not been shipped.</p>
+      <div class="space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-6 mb-8">
+        <dl class="flex items-center justify-between gap-4">
+          <dt class="font-normal text-gray-500">Date</dt>
+          <dd class="font-medium text-gray-900 text-end">{{order.orderDate | date: 'medium'}}</dd>
+        </dl>
+        <dl class="flex items-center justify-between gap-4">
+          <dt class="font-normal text-gray-500">Payment method</dt>
+          <dd class="font-medium text-gray-900 text-end">{{order.paymentSummary | payment}}</dd>
+        </dl>
+        <dl class="flex items-center justify-between gap-4">
+          <dt class="font-normal text-gray-500">Address</dt>
+          <dd class="font-medium text-gray-900 text-end">{{order.shippingAddress | address}}</dd>
+        </dl>
+        <dl class="flex items-center justify-between gap-4">
+          <dt class="font-normal text-gray-500">Amount</dt>
+          <dd class="font-medium text-gray-900 text-end">{{order.subtotal | currency}}</dd>
+        </dl>
+      </div>
+      <div class="flex item-center space-x-4">
+        <button routerLink="/orders/{{order.id}}" mat-flat-button>View your order</button>
+        <button routerLink="/shop" mat-flat-button>Continue shopping</button>
+      </div>
     </div>
-    <div class="flex item-center space-x-4">
-      <button routerLink="/orders/42" mat-flat-button>View your order</button>
-      <button routerLink="/shop" mat-flat-button>Continue shopping</button>
-    </div>
-  </div>
-</section>
+  </section>
+}
