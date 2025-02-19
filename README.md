@@ -8,6 +8,7 @@ This project is a web application for online sales of skiing equipment, develope
 - Shopping cart functionality
 - Secure order processing and tracking
 - User authentication and authorization
+- Payment
 
 ## 🏗️ Technologies
 The project utilizes modern technologies:
@@ -15,6 +16,7 @@ The project utilizes modern technologies:
 - **Frontend:** Angular
 - **Database:** PostgreSQL
 - **Authentication:** JWT
+- **Payment:** Stripe
 
 ## 📂 Architecture
 This project follows a monolithic architecture where all business logic, data access, and API endpoints are integrated into a single application. The structure includes:
